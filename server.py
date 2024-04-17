@@ -1,5 +1,5 @@
 import json
-from flask import Flask,render_template,request,redirect,flash,url_for
+from flask import Flask,render_template,request,redirect,flash,url_for, jsonify
 
 
 def loadClubs():
@@ -46,8 +46,6 @@ def purchasePlaces():
     competition = [c for c in competitions if c['name'] == request.form['competition']][0]
     club = [c for c in clubs if c['name'] == request.form['club']][0]
     placesRequired = int(request.form['places'])
-    # Deduct points and update available places
-    club['points'] = int(club['points']) - placesRequired
     competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-placesRequired
     flash('Great-booking complete!')
     return render_template('welcome.html', club=club, competitions=competitions)
@@ -59,6 +57,13 @@ def purchasePlaces():
 @app.route('/logout')
 def logout():
     return redirect(url_for('index'))
+
+@app.route('/points')
+def display_points():
+    # Créez une liste de dictionnaires contenant le nom du club et ses points
+    club_points = [{"name": club['name'], "points": club['points']} for club in clubs]
+    # Renvoyez les données sous forme JSON
+    return render_template('points_display.html', club_points=club_points)
 
 if __name__ == "__main__":
     app.run(debug=True)
