@@ -10,3 +10,4 @@ master.py
 test_show_summary.py
 test_more_point_allowed.py
 test_more_than_12.py
+test_past_competitions.py

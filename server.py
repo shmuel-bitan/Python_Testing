@@ -1,6 +1,6 @@
 import json
 from flask import Flask,render_template,request,redirect,flash,url_for
-from datetime import datetime
+
 
 def loadClubs():
     with open('clubs.json') as c:
@@ -31,33 +31,23 @@ def showSummary():
 
 
 @app.route('/book/<competition>/<club>')
-def book(competition, club):
-    foundClub = next((c for c in clubs if c['name'] == club), None)
-    foundCompetition = next((c for c in competitions if c['name'] == competition), None)
-
-    # Check if the competition exists
-    if not foundCompetition:
-        flash("Invalid competition. Please try again.")
-        return render_template('index.html', error_message="Invalid competition. Please try again.")
-
-    # Check if the competition has already occurred
-    competition_datetime = datetime.strptime(foundCompetition['date'], '%Y-%m-%d %H:%M:%S')
-    if competition_datetime < datetime.now():
-        flash("You cannot book places for a past competition.")
-        return render_template('index.html', error_message="You cannot book places for a past competition.")
-
-    # If both club and competition are found and the competition has not occurred yet, render booking.html
+def book(competition,club):
+    foundClub = [c for c in clubs if c['name'] == club][0]
+    foundCompetition = [c for c in competitions if c['name'] == competition][0]
     if foundClub and foundCompetition:
-        return render_template('booking.html', club=foundClub, competition=foundCompetition)
+        return render_template('booking.html',club=foundClub,competition=foundCompetition)
     else:
-        flash("Something went wrong. Please try again.")
-        return render_template('index.html', error_message="Something went wrong. Please try again.")
+        flash("Something went wrong-please try again")
+        return render_template('welcome.html', club=club, competitions=competitions)
+
 
 @app.route('/purchasePlaces',methods=['POST'])
 def purchasePlaces():
     competition = [c for c in competitions if c['name'] == request.form['competition']][0]
     club = [c for c in clubs if c['name'] == request.form['club']][0]
     placesRequired = int(request.form['places'])
+    # Deduct points and update available places
+    club['points'] = int(club['points']) - placesRequired
     competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-placesRequired
     flash('Great-booking complete!')
     return render_template('welcome.html', club=club, competitions=competitions)
