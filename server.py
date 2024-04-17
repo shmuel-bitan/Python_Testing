@@ -45,9 +45,9 @@ def book(competition,club):
 def purchasePlaces():
     competition = [c for c in competitions if c['name'] == request.form['competition']][0]
     club = [c for c in clubs if c['name'] == request.form['club']][0]
-    places_requested = int(request.form['places'])
+    placesRequired = int(request.form['places'])
     #  ( issue 3)
-    if places_requested > 12:
+    if placesRequired > 12:
         flash("Insufficient places available for booking.")
         return redirect(url_for('index'))
     competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-placesRequired
