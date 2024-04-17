@@ -8,3 +8,4 @@ __pycache__
 .pytest_cache
 master.py
 test_show_summary.py
+test_more_point_allowed.py
