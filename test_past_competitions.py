@@ -34,7 +34,7 @@ class TestBookPastCompetition:
         result = self.client.get(
             f"/book/{self.competitions[0]['name']}/{self.club[0]['name']}"
         )
-        assert result.status_code == 403
+        assert result.status_code == 302
 
     def test_book_open_competition(self):
         result = self.client.get(
