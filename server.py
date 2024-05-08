@@ -101,7 +101,7 @@ def logout():
 
 @app.route('/points')
 def display_points():
-    club_points = [{"name": club['name'], "points": club['points']} for club in clubs]
+    club_points = [{"name": club['name'], "points": int(club['points'])} for club in clubs]
     return render_template('points_display.html', club_points=club_points)
 
 

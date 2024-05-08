@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,6 +19,14 @@
         th {
             background-color: #f2f2f2;
         }
+
+
+        {% for club in club_points %}
+        {% set brightness = 10 + club.points %}
+        .club-{{ loop.index }} {
+            background-color: rgba(0, 0, 0, 0.{{ brightness }});
+        }
+        {% endfor %}
     </style>
 </head>
 <body>
@@ -33,7 +40,7 @@
         </thead>
         <tbody>
             {% for club in club_points %}
-            <tr>
+            <tr class="club-{{ loop.index }}">
                 <td>{{ club.name }}</td>
                 <td>{{ club.points }}</td>
             </tr>
